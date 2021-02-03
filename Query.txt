@@ -1,0 +1,70 @@
+Q1
+
+/* Top 5 Country of total invoice  */
+
+SELECT Customer.Country,
+	    COUNT(Invoice.total) as Number_of_total
+FROM Invoice
+JOIN Customer on Customer.CustomerId = Invoice.CustomerId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 5;
+
+——————————————————————
+Q2
+
+/* Top 4 highest price of artist */
+
+SELECT Artist.ArtistId,
+	    Artist.Name as Artist_name,
+	    ROUND(SUM(InvoiceLine.Quantity*InvoiceLine.UnitPrice)) AS Price
+FROM Artist
+JOIN Album
+ON Album.ArtistId= Artist.ArtistId
+JOIN Track
+ON Track.AlbumId= Album.AlbumId
+JOIN InvoiceLine
+ON InvoiceLine.TrackId= Track.TrackId
+GROUP BY 1,2
+ORDER BY 3 DESC
+LIMIT 4;
+
+—————————————————————
+Q3
+
+/* Customer Who Purchased the Most from Iron Maiden in USA */
+
+SELECT Customer.FirstName as Customer_Name,
+           COUNT(Customer.CustomerId) AS Total_Purchased
+		   
+FROM Customer 
+JOIN Invoice  
+ON Customer.CustomerId = Invoice.CustomerId
+JOIN InvoiceLine  
+ON Invoice.InvoiceId = InvoiceLine.InvoiceId
+JOIN Track  
+ON InvoiceLine.TrackId = Track.TrackId
+JOIN Album  
+ON Track.AlbumId = Album.AlbumId
+JOIN Artist  
+ON Album.ArtistId = Artist.ArtistId
+WHERE Artist.Name = 'Iron Maiden' 
+           AND Customer.Country = 'USA'
+GROUP BY 1
+ORDER BY 2 DESC
+
+——————————————————
+Q4
+
+/* The 4 most Album sales*/
+
+SELECT  Album.Title AS Album_Title,
+	     COUNT(InvoiceLine.Quantity*InvoiceLine.UnitPrice) AS Total_Amount
+FROM InvoiceLine
+JOIN Track
+ON Track.TrackId=InvoiceLine.TrackId
+JOIN Album
+ON Album.AlbumId=Track.AlbumId
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 4;
